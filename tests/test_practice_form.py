@@ -28,14 +28,14 @@ def test_register_a_student():
     ss('[for^=gender-radio]').element_by(have.exact_text('Male')).click()
     s('#userNumber').type('89991234407')
     datepicker.set_by_click('#dateOfBirthInput', '11', 'October', '1998')
-    tags_input.set_by_tab(
+    tags_input.set_by_click(
         '#subjectsInput', 'Computer Science', 'Maths', 'Commerce'
     )
     checkbox.set('[for^=hobbies-checkbox]', 'Reading', 'Music')
     s('#uploadPicture').type(resource('avatar.png'))
     s('#currentAddress').type('27302 Ardelia Spurs, Kunzetown, GA 83306-2195')
     dropdown.set_by_click('#state', 'Haryana')
-    dropdown.set_by_click('#city', 'Karnal')
+    dropdown.set_by_click('#city', 'Panipat')
     s('#submit').click()
 
     # THEN
@@ -47,7 +47,7 @@ def test_register_a_student():
             '8999123440',
             '11 October,1998',
             'Computer Science, Maths, Commerce',
-            'Reading, Musc',
+            'Reading, Music',
             'avatar.png',
             '27302 Ardelia Spurs, Kunzetown, GA 83306-2195',
             'Haryana Panipat',
