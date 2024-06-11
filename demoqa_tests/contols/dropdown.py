@@ -1,9 +1,13 @@
 from selene import have
-from selene.support.shared.jquery_style import s
+from selene.core.entity import Element
 
 
-def set_by_click(selector: str, value):
-    s(selector).click()
-    s(selector).s('[class$=menu]').ss('[class$=option]').element_by(
-        have.exact_text(value)
-    ).click()
+class Dropdown:
+    def __init__(self, s: Element):
+        self.s = s
+
+    def set_by_click(self, value: str):
+        self.s.click()
+        self.s.s('[class$=menu]').ss('[class$=option]').element_by(
+            have.exact_text(value)
+        ).click()

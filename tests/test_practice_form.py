@@ -1,11 +1,13 @@
-from selene import browser, have, command
+from selene import browser, have
 from selene.support.shared.jquery_style import s, ss
 from demoqa_tests.utils.path import resource
 from demoqa_tests.contols import (
-    datepicker,
-    dropdown,
-    checkbox,
-    tags_input,
+    TagsInput,
+    Dropdown,
+    DatePicker,
+    Checkbox,
+    Menu,
+    Table,
 )
 
 
@@ -13,13 +15,11 @@ def test_register_a_student():
     # GIVEN
     browser.open('https://demoqa.com')
 
-    s('.category-cards').ss('.card-body').element_by(
-        have.exact_text('Forms')
-    ).perform(command.js.scroll_into_view).click()
+    cards = Menu(s('.category-cards').ss('.card-body'))
+    cards.select('Forms')
 
-    s('.left-pannel').ss('.menu-list').element_by(
-        have.exact_text('Practice Form')
-    ).click()
+    panel = Menu(s('.left-pannel').ss('.menu-list'))
+    panel.select('Practice Form')
 
     # WHEN
     s('#firstName').type('Aleksei')
@@ -27,19 +27,30 @@ def test_register_a_student():
     s('#userEmail').type('torsukov@test.ru')
     ss('[for^=gender-radio]').element_by(have.exact_text('Male')).click()
     s('#userNumber').type('89991234407')
-    datepicker.set_by_click('#dateOfBirthInput', '11', 'October', '1998')
-    tags_input.set_by_click(
-        '#subjectsInput', 'Computer Science', 'Maths', 'Commerce'
-    )
-    checkbox.set('[for^=hobbies-checkbox]', 'Reading', 'Music')
+
+    date_of_birth = DatePicker(s('#dateOfBirthInput'))
+    date_of_birth.set_by_click('11', 'October', '1998')
+
+    subjects = TagsInput(s('#subjectsInput'))
+    subjects.set_by_click('Computer Science', 'Maths', 'Commerce')
+
+    hobbies = Checkbox(ss('[for^=hobbies-checkbox]'))
+    hobbies.set('Reading', 'Music')
+
     s('#uploadPicture').type(resource('avatar.png'))
     s('#currentAddress').type('27302 Ardelia Spurs, Kunzetown, GA 83306-2195')
-    dropdown.set_by_click('#state', 'Haryana')
-    dropdown.set_by_click('#city', 'Panipat')
+
+    state = Dropdown(s('#state'))
+    state.set_by_click('Haryana')
+
+    city = Dropdown(s('#city'))
+    city.set_by_click('Panipat')
+
     s('#submit').click()
 
     # THEN
-    s('.modal-content').s('.table').all('td').even.should(
+    modal = Table(s('.modal-content').s('.table'))
+    modal.cells.even.should(
         have.exact_texts(
             'Aleksei Torsukov',
             'torsukov@test.ru',
