@@ -1,12 +1,10 @@
-from selene.support.shared.jquery_style import s, ss
-
+from selene.support.shared.jquery_style import s
 from selene import have, command
-from selene.core.entity import Collection
 
 
 class Panel:
 
-    def select_registration_form(self):
+    def select_student_registration_form(self):
         self._select('Forms', 'Practice Form')
 
     def select_simple_registration_form(self):
