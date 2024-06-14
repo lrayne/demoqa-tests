@@ -1,5 +1,9 @@
+from datetime import date
+
 from selene import have, command
 from selene.support.shared.jquery_style import s, ss
+
+from demoqa_tests.model.data import Subject, Gender, Hobby, State, City
 from demoqa_tests.utils.path import resource
 
 
@@ -22,9 +26,9 @@ class RegistrationForm:
         s('#userEmail').type(value)
         return self
 
-    def fill_gender(self, value: str):
+    def fill_gender(self, gender: Gender):
         s('#genterWrapper').all('label[for^=gender-radio]').element_by(
-            have.text(value)
+            have.text(gender.value)
         ).click()
         return self
 
@@ -32,8 +36,8 @@ class RegistrationForm:
         s('#userNumber').type(value)
         return self
 
-    def fill_date_of_birth(self, value: str):
-        day, month, year = value.split(' ')
+    def fill_date_of_birth(self, value: date):
+        day, month, year = value.strftime('%d %B %Y').split(' ')
         s('#dateOfBirthInput').click()
         self.datepicker.element('[class$=year-select]').all(
             'option'
@@ -46,19 +50,19 @@ class RegistrationForm:
         ).element_by(have.text(f'{day}')).click()
         return self
 
-    def fill_subjects(self, values: list[str]):
+    def fill_subjects(self, subjects: list[Subject]):
         self.subjects.click()
-        for value in values:
-            self.subjects.type(value)
+        for subject in subjects:
+            self.subjects.type(subject.value)
             s('[class*=auto-complete__menu]').ss('[id*=option]').element_by(
-                have.exact_text(value)
+                have.exact_text(subject.value)
             ).click()
         return self
 
-    def set_hobbies(self, values: list[str]):
-        for value in values:
+    def set_hobbies(self, hobbies: list[Hobby]):
+        for hobby in hobbies:
             ss('[for^=hobbies-checkbox]').element_by(
-                have.exact_text(value)
+                have.exact_text(hobby.value)
             ).perform(command.js.scroll_into_view).click()
         return self
 
@@ -70,17 +74,17 @@ class RegistrationForm:
         s('#currentAddress').type(value)
         return self
 
-    def fill_state(self, value: str):
+    def fill_state(self, state: State):
         self.state.perform(command.js.scroll_into_view).click()
         self.state.all('[id^=react-select-3-option]').element_by(
-            have.text(value)
+            have.text(state.value)
         ).click()
         return self
 
-    def fill_city(self, value: str):
+    def fill_city(self, city: City):
         self.city.click()
         self.city.all('[id^=react-select-4-option]').element_by(
-            have.text(value)
+            have.text(city.value)
         ).click()
         return self
 
