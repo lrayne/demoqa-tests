@@ -1,66 +1,51 @@
-from selene import browser, have
-from selene.support.shared.jquery_style import s, ss
-from demoqa_tests.utils.path import resource
-from demoqa_tests.contols import (
-    TagsInput,
-    Dropdown,
-    DatePicker,
-    Checkbox,
-    Menu,
-    Table,
-)
+from selene import have
+from demoqa_tests.model.pages.home_page import HomePage
+from demoqa_tests.model.pages.forms_page import FormsPage
+from demoqa_tests.model.pages.registration_page import RegistrationPage
 
 
 def test_register_a_student():
+
     # GIVEN
-    browser.open('https://demoqa.com')
-
-    cards = Menu(s('.category-cards').ss('.card-body'))
-    cards.select('Forms')
-
-    panel = Menu(s('.left-pannel').ss('.menu-list'))
-    panel.select('Practice Form')
+    home_page = HomePage()
+    forms_page = FormsPage()
+    registration_page = RegistrationPage()
 
     # WHEN
-    s('#firstName').type('Aleksei')
-    s('#lastName').type('Torsukov')
-    s('#userEmail').type('torsukov@test.ru')
-    ss('[for^=gender-radio]').element_by(have.exact_text('Male')).click()
-    s('#userNumber').type('89991234407')
+    home_page.open()
+    home_page.select_forms()
+    forms_page.panel.select_student_registration_form()
 
-    date_of_birth = DatePicker(s('#dateOfBirthInput'))
-    date_of_birth.set_by_click('11', 'October', '1998')
-
-    subjects = TagsInput(s('#subjectsInput'))
-    subjects.set_by_click('Computer Science', 'Maths', 'Commerce')
-
-    hobbies = Checkbox(ss('[for^=hobbies-checkbox]'))
-    hobbies.set('Reading', 'Music')
-
-    s('#uploadPicture').type(resource('avatar.png'))
-    s('#currentAddress').type('27302 Ardelia Spurs, Kunzetown, GA 83306-2195')
-
-    state = Dropdown(s('#state'))
-    state.set_by_click('Haryana')
-
-    city = Dropdown(s('#city'))
-    city.set_by_click('Panipat')
-
-    s('#submit').click()
+    (
+        registration_page.form.fill_first_name('Aleksei')
+        .fill_last_name('Torsukov')
+        .fill_email('torsukov@test.ru')
+        .fill_gender('Male')
+        .fill_mobile('8999123440')
+        .fill_date_of_birth('11 October 1998')
+        .fill_subjects(['Computer Science', 'English'])
+        .set_hobbies(['Reading', 'Music'])
+        .upload_avatar('photo.png')
+        .fill_current_address(
+            'Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678'
+        )
+        .fill_state('NCR')
+        .fill_city('Delhi')
+        .submit()
+    )
 
     # THEN
-    modal = Table(s('.modal-content').s('.table'))
-    modal.cells.even.should(
+    registration_page.user_data.should(
         have.exact_texts(
             'Aleksei Torsukov',
             'torsukov@test.ru',
             'Male',
             '8999123440',
             '11 October,1998',
-            'Computer Science, Maths, Commerce',
+            'Computer Science, English',
             'Reading, Music',
-            'avatar.png',
-            '27302 Ardelia Spurs, Kunzetown, GA 83306-2195',
-            'Haryana Panipat',
+            'photo.png',
+            'Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678',
+            'NCR Delhi',
         )
     )
