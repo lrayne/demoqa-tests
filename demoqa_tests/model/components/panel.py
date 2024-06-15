@@ -1,12 +1,15 @@
+import allure
 from selene.support.shared.jquery_style import s
 from selene import have, command
 
 
 class Panel:
 
+    @allure.step('В панели выбрать регистрацию студента')
     def select_student_registration_form(self):
         self._select('Forms', 'Practice Form')
 
+    @allure.step('В панели выбрать упрощенную регистрацию студента')
     def select_simple_registration_form(self):
         self._select('Elements', 'Text Box')
 
