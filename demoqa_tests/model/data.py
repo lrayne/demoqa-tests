@@ -58,5 +58,23 @@ class User:
     hobbies: List[Hobby]
     avatar: str
     address: str
+    permanent_address: str
     state: State
     city: City
+
+
+student = User(
+    first_name='Aleksei',
+    last_name='Torsukov',
+    email='torsukov@test.ru',
+    gender=Gender.male,
+    mobile='8999123440',
+    date_of_birth=date(1998, 10, 11),
+    subjects=[Subject.english, Subject.computer_science],
+    hobbies=[Hobby.sports, Hobby.reading],
+    avatar='photo.png',
+    address='Robert Robertson, 1234 NW Bobcat Lane, St. Robert, MO 65584-5678',
+    permanent_address='Prof. Fredy Gusikowski',
+    state=State.ncr,
+    city=City.gurgaon,
+)
