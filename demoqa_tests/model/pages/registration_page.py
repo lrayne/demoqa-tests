@@ -1,3 +1,4 @@
+import allure
 from selene import browser, have, command
 from selene.support.shared.jquery_style import s, ss
 from demoqa_tests.model.components.panel import Panel
@@ -13,10 +14,12 @@ class RegistrationPage:
         self.state = s('#state')
         self.city = s('#city')
 
+    @allure.step('Открыть страницу \'Регистрация студента\'')
     def open(self):
         browser.open('/automation-practice-form')
         return self
 
+    @allure.step('Зарегистрировать студента')
     def register(self, user: User):
         s('#firstName').type(user.first_name)
         s('#lastName').type(user.last_name)
@@ -69,6 +72,7 @@ class RegistrationPage:
 
         s('#submit').click()
 
+    @allure.step('Студент должен быть зарегистрирован')
     def should_be_registered(self, user: User):
         s('.modal-content').s('.table').all('td').even.should(
             have.exact_texts(

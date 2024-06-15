@@ -1,3 +1,4 @@
+import allure
 from selene import browser
 from demoqa_tests.model.pages.forms_page import FormsPage
 from demoqa_tests.model.pages.home_page import HomePage
@@ -13,6 +14,7 @@ class Application:
     registration_page = RegistrationPage()
     simple_registration_page = SimpleRegistrationPage()
 
+    @allure.step('Открыть стартовую страницу сайта')
     def open(self):
         browser.open('/')
         return self
